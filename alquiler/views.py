@@ -42,7 +42,7 @@ def signout(request):
 def obtener_datos():
     with connection.cursor() as cursor:
         # Ejecutar una consulta SQL
-        cursor.execute("SELECT * FROM django_content_type;")
+        cursor.execute("SELECT * FROM Pelicula;")
         
         # Obtener los resultados
         resultados = cursor.fetchall()

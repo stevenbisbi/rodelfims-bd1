@@ -82,8 +82,8 @@ DATABASES = {
         'NAME': 'railway',
         'USER': 'root',
         'PASSWORD': 'uuWMMRKGoVoMEnaJjHvWZayEYLeFotNy',
-        'HOST': 'mysql.railway.internal',
-        'PORT': '3306',  # Usa el puerto por defecto si no está definido
+        'HOST': 'autorack.proxy.rlwy.net',
+        'PORT': '51675',  # Usa el puerto por defecto si no está definido
     }
 }
 
