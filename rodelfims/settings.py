@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'rodelfims.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'railway',
+        'NAME': 'alquiler_peliculas',
         'USER': 'root',
-        'PASSWORD': 'uuWMMRKGoVoMEnaJjHvWZayEYLeFotNy',
-        'HOST': 'mysql.railway.internal',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
         'PORT': '3306',  # Usa el puerto por defecto si no está definido
     }
 }

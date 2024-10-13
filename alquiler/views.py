@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.db import connection
+
 # Create your views here.
 def home(request):
     #actores = Actor.objects.all()
@@ -36,3 +38,19 @@ def signup(request):
 def signout(request):
     logout(request)
     return redirect('home')
+
+def obtener_datos():
+    with connection.cursor() as cursor:
+        # Ejecutar una consulta SQL
+        cursor.execute("SELECT * FROM django_content_type;")
+        
+        # Obtener los resultados
+        resultados = cursor.fetchall()
+
+    return resultados
+
+from django.http import JsonResponse
+
+def mi_vista(request):
+    datos = obtener_datos()
+    return JsonResponse(datos, safe=False)
