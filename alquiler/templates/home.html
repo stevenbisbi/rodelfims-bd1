@@ -1,0 +1,92 @@
+{% extends 'layouts/base.html' %} {% block content %} {% load static %}
+<section class="fondo"></section>
+
+<section class="section-1">
+  <div class="contenedor">
+    <h1>Alquila las mejores películas en línea</h1>
+    <p>
+      Disfruta de un amplio catalogo de películas para alquilar desde la
+      comodidad de tu hogar
+    </p>
+    <div class="boton-container">
+      <button class="boton-main">Alquilar</button>
+      <button class="boton-secundary">Ver</button>
+    </div>
+  </div>
+</section>
+<section class="section-2 contenedor m-t">
+  <div class="grid-2">
+    <div>
+      <h1>Bienvenidos a Rodelfims, su cine</h1>
+      <p class="p">
+        En Rodelfims ofrecemos servicio de alquiler de películas en linea,
+        brindando acceso a una amplia variedad de titulos para disfrutar desde
+        la comodidad de su hogar
+      </p>
+      <button class="button">Alquiler</button>
+    </div>
+    <div>
+      <img class="img-radius" src="{% static 'img/comentario.webp' %}" alt="comentario" />
+    </div>
+  </div>
+</section>
+<section class="section-3 contenedor m-t">
+  <div class="texto">
+    <h1>Alquiler de películas</h1>
+    <p class="p">
+      Descubre una amplia seleccion de películas para disfrutar en la comodidad
+      de tu hogar.
+    </p>
+  </div>
+  <div class="grid-2 texto">
+    <div class="section-3-izquierda">
+      <h1>Clasicos del cine</h1>
+      <p>
+        Revive los grandes Clasicos del cine y disfruta de historias
+        inolvidables en tu pantalla.
+      </p>
+      <img src="{% static 'img/clasico.jpeg' %}" alt="cine clasico" />
+    </div>
+    <div class="section-3-derecha">
+      <h1>Peliculas Nuevas</h1>
+      <p>
+        Alquila las ultimas peliculas y disfruta de estrenos a solo un click <br> <br>
+      </p>
+      <img
+        class="imagen"
+        src="{% static 'img/estrenos.jpeg' %}"
+        alt="estrenos cine"
+      />
+    </div>
+  </div>
+</section>
+  <section class="galeria contenedor m-t">
+    <div class="texto">
+      <h1>Galeria de peliculas</h1>
+      <p class="p">
+        Explora nuestra seccion de peliculas disponibles para alquiler en linea
+      </p>
+    </div>
+    <div class="grid-container">
+      <div class="item1 img-radius">
+        <img src="{% static 'img/imagen1.jpeg' %}" alt="Imagen 1" />
+      </div>
+      <div class="item2 img-radius">
+        <img src="{% static 'img/imagen2.jpg' %}" alt="Imagen 2" />
+      </div>
+      <div class="item3 img-radius">
+        <img src="{% static 'img/imagen3.jpeg' %}" alt="Imagen 3" />
+      </div>
+      <div class="item4 img-radius">
+        <img src="{% static 'img/imagen5.webp' %}" alt="Imagen 5" />
+      </div>
+      <div class="item5 img-radius">
+        <img src="{% static 'img/imagen4.jpeg' %}" alt="Imagen 4" />
+      </div>
+      <div class="item6 img-radius">
+        <img src="{% static 'img/imagen6.PNG' %}" alt="Imagen 6" />
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

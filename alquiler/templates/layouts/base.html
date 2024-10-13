@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rodelfims</title>
+    <link rel="icon" href="{% static 'img/icon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
+    <link rel="stylesheet" href="{% static 'css/css.css' %}">
+</head>
+<body>
+    <nav class="navegacion">
+        <h1>Rodelfims</h1>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/alquiler">Alquiler</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="/signout">Cerrar Sesion</a></li>
+            {% else %}
+            <li><a href="/signin">Iniciar Sesion</a></li>
+            <li><a href="/signup">Registrarse</a></li>
+            {% endif %}
+            <li><a href="#">Contacto</a></li>
+        </ul>
+    </nav>
+    
+   <main>
+    {% block content %}
+    {% endblock %}
+   </main> 
+   <footer class="footer grid-2">
+    <div class="footer-iz">
+        <h1>Cine</h1>
+        <p>Alquila tus peliculas favoritas en linea facilmente.</p>
+        <div class="redes">
+            <a href="https://web.facebook.com/K.R.Manrique22">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-facebook" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" />
+                  </svg>
+            </a>
+            <a href="https://www.instagram.com/krmanrrique/">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-instagram" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M4 4m0 4a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z" />
+                    <path d="M12 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+                    <path d="M16.5 7.5l0 .01" />
+                  </svg>
+            </a>
+              
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-tiktok" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M21 7.917v4.034a9.948 9.948 0 0 1 -5 -1.951v4.5a6.5 6.5 0 1 1 -8 -6.326v4.326a2.5 2.5 0 1 0 4 2v-11.5h4.083a6.005 6.005 0 0 0 4.917 4.917z" />
+              </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="44" height="44" viewBox="0 0 50 50"
+                style="fill:#FFFFFF;">
+                <path d="M 6.9199219 6 L 21.136719 26.726562 L 6.2285156 44 L 9.40625 44 L 22.544922 28.777344 L 32.986328 44 L 43 44 L 28.123047 22.3125 L 42.203125 6 L 39.027344 6 L 26.716797 20.261719 L 16.933594 6 L 6.9199219 6 z"></path>
+                </svg>
+            </div>
+                <p>&copy; 2024 Rodelfims. Todos los derechos reservados. Michael Steven Sanchez</p>
+            
+        </div>
+        
+        <div class="footer-der">
+            <div class="servicios">
+                <h1>SERVICIOS</h1>
+                <P>31924252522</P>
+                <P>contato@rodelfims.com</P>
+            </div>
+            <div class="contacto">
+                <h1>CONTACTO</h1>
+                <form action="/enviar-correo" method="POST">
+                    <label for="email">Ingresa tu correo electrónico:</label>
+                    <input type="email" id="email" name="email" placeholder="Tu correo aquí por favor" required>
+                    <button type="submit">Enviar solicitud de alquiler</button>
+                </form>
+            </div>
+        </div>
+    </div>
+   </footer>
+   <style>
+    .imagen {
+        background-image: url("{% static 'img/contacto.jpg' %}");
+        height: 40rem;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+    .imagen-1 {
+        background-image: url("{% static 'img/comentario.webp' %}");
+        height: 40rem;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
+
+</body>
+</html>
