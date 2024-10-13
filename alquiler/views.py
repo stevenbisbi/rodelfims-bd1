@@ -5,6 +5,8 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.db import connection
+from django.http import JsonResponse
+import random
 
 # Create your views here.
 def home(request):
@@ -40,17 +42,18 @@ def signout(request):
     return redirect('home')
 
 def obtener_datos():
-    with connection.cursor() as cursor:
-        # Ejecutar una consulta SQL
-        cursor.execute("SELECT * FROM Pelicula;")
-        
-        # Obtener los resultados
-        resultados = cursor.fetchall()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM Pelicula")
+    columns = [col[0] for col in cursor.description]  # Obtiene los nombres de las columnas
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]  # Combina los nombres de columnas con los datos
 
-    return resultados
 
-from django.http import JsonResponse
 
 def mi_vista(request):
     datos = obtener_datos()
     return JsonResponse(datos, safe=False)
+
+def pelicuas(request):
+    img_random = random.randint(1, 10)
+    peliculas = obtener_datos()
+    return render(request, 'peliculas.html', {'peliculas': peliculas, 'img_random':img_random})
