@@ -61,7 +61,7 @@ h4 {
 }
 
 img {
-    max-width: 100%;
+    width: 100%;
     border-radius: 15px;
 }
 
@@ -116,6 +116,7 @@ footer {
     cursor: pointer;
     background-color: transparent; /* Fondo transparente */
 }
+
 .section-1 h1{
     display: inline-block;
     padding: 15rem  10rem 0rem 20rem ;
@@ -289,30 +290,44 @@ footer {
     border-radius: 20px;
 }
 
-/* alquiler */
+/* Alquiler */
 .movie-card {
     margin: 20px;
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color:#ddd ;
 }
 .movie-image {
+    justify-content: center;
     height: 400px;
     object-fit: cover;
-    width: 100%;
+    max-width: 300px;
 }
 .movie-details {
-    padding: 15px;
+    padding: 10px;
 }
 .movie-title {
-    font-size: 1.5rem;
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.movie-atributes{
+    font-size: 3.5rem;
     font-weight: bold;
     margin-bottom: 10px;
 }
 .movie-description {
-    font-size: 1rem;
-    color: #555;
+    font-size: 2rem;
+    color: #fdefef;
     margin-bottom: 15px;
 }
+.bg{
+    background: rgb(2,0,36) !important; 
+    background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(40,57,147,0.9794292717086834) 54%, rgba(0,212,255,1) 87%) !important;
+}
 
+.titulo-bg{
+    color: #fdefef;
+}

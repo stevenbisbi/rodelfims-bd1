@@ -1,0 +1,12 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Agregar Película</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+</form>
+
+<a href="../" class="btn btn-secondary mt-3">Volver a la lista</a>
+{% endblock %}

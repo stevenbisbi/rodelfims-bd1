@@ -13,25 +13,26 @@
 </head>
 <body>
 
-    <section class="container m-t">
-        <h1 class="text-center mb-4">Selección de Películas</h1>
+    <section class="container m-t bg img-radius">
+        <h1 class="text-center mb-4 titulo-bg">Selección de Películas</h1>
         
         <div class="row">
             <h1>{{peliculas.Titulo}}</h1>
             {% if peliculas %}
                 {% for pelicula in peliculas %}
-                <div class="col-md-4">
+                <div class="col-md-4 my-3">
                     <div class="movie-card">
-                        <img src="{% static 'img/' %}{{ img_random }}.jpg" alt="Poster de Película {{ pelicula.id }}" class="movie-image">
+                        <img src="{% static 'img/' %}{{ forloop.counter }}.jpg" alt="Poster de Película {{ pelicula.id }}" class="movie-image">
                         <div class="movie-details">
                             <h2 class="movie-title">{{ pelicula.Titulo }}</h2>
+                            <h5 class="movie-description">{{ pelicula.Fecha }}</h5>
                             <p class="movie-description">Es una película increíble que no te puedes perder.</p>
                             <h5>Nacionalidad:</h5>
-                            <h4 class="movie-description">{{ pelicula.Nacionalidad }}</h4>
+                            <h4 class="movie-atributes">{{ pelicula.Nacionalidad }}</h4>
                             <h5>Productora:</h5>
-                            <h4 class="movie-description">{{ pelicula.Productora }}</h4>
-                            <button class="btn button">Agregar al Carrito</button>
-                            <button class="btn button">Ver Detalles</button>
+                            <h4 class="movie-atributes">{{ pelicula.Productora }}</h4>
+                            <button class="btn boton-main">Agregar al Carrito</button>
+                            <button class="btn boton-secundary">Ver Detalles</button>
                         </div>
                     </div>
                 </div>

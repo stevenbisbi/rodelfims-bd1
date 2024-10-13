@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.db import connection
 from django.http import JsonResponse
+from .forms import PeliculaForm
 import random
 
 # Create your views here.
@@ -65,3 +66,6 @@ def peliculas(request):
     peliculas = obtener_datos()
     return render(request, 'alquiler.html', {'peliculas': peliculas, 'img_random':img_random})
     
+def menu(request):
+    form = PeliculaForm()
+    return render(request, 'administrador.html', {'form':form})
