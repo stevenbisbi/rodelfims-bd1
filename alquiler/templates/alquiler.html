@@ -17,6 +17,7 @@
         <h1 class="text-center mb-4">Selección de Películas</h1>
         
         <div class="row">
+            <h1>{{peliculas.Titulo}}</h1>
             {% if peliculas %}
                 {% for pelicula in peliculas %}
                 <div class="col-md-4">
@@ -25,8 +26,10 @@
                         <div class="movie-details">
                             <h2 class="movie-title">{{ pelicula.Titulo }}</h2>
                             <p class="movie-description">Es una película increíble que no te puedes perder.</p>
-                            <h3 class="movie-description">{{ pelicula.Nacionalidad }}</h3>
-                            <h3 class="movie-description">{{ pelicula.Productora }}</h3>
+                            <h5>Nacionalidad:</h5>
+                            <h4 class="movie-description">{{ pelicula.Nacionalidad }}</h4>
+                            <h5>Productora:</h5>
+                            <h4 class="movie-description">{{ pelicula.Productora }}</h4>
                             <button class="btn button">Agregar al Carrito</button>
                             <button class="btn button">Ver Detalles</button>
                         </div>

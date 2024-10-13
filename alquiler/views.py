@@ -42,10 +42,17 @@ def signout(request):
     return redirect('home')
 
 def obtener_datos():
-    cursor = connection.cursor()
-    cursor.execute("SELECT * FROM Pelicula")
-    columns = [col[0] for col in cursor.description]  # Obtiene los nombres de las columnas
-    return [dict(zip(columns, row)) for row in cursor.fetchall()]  # Combina los nombres de columnas con los datos
+    try:
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM Pelicula")
+        columns = [col[0] for col in cursor.description]  # Nombres de las columnas
+        datos = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        print(datos)  # Imprime los datos para verificar
+        return datos
+    except Exception as e:
+        print(f"Error al obtener datos: {e}")
+        return []
+
 
 
 
@@ -53,7 +60,8 @@ def mi_vista(request):
     datos = obtener_datos()
     return JsonResponse(datos, safe=False)
 
-def pelicuas(request):
+def peliculas(request):
     img_random = random.randint(1, 10)
     peliculas = obtener_datos()
-    return render(request, 'peliculas.html', {'peliculas': peliculas, 'img_random':img_random})
+    return render(request, 'alquiler.html', {'peliculas': peliculas, 'img_random':img_random})
+    
