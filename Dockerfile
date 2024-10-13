@@ -1,15 +1,31 @@
+# Usa una imagen base de Python
 FROM python:3.11-slim
 
+# Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Instalar las dependencias necesarias para mysqlclient
+# Instala las dependencias del sistema necesarias para mysqlclient
 RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    pkg-config \         
     default-libmysqlclient-dev \
     build-essential \
-    && apt-get clean
+    && rm -rf /var/lib/apt/lists/*
 
-COPY . /app/.
+# Copia los archivos del proyecto al contenedor
+COPY . .
 
-RUN --mount=type=cache,id=s/6c97f769-12ef-45df-a107-c1d080bd0bdf-/root/cache/pip,target=/root/.cache/pip python -m venv --copies /opt/venv && . /opt/venv/bin/activate && pip install -r requirements.txt
+# Crea y activa un entorno virtual
+RUN python -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
+# Instala las dependencias de Python
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
+
+# Expone el puerto que usará la app
+EXPOSE 8000
+
+# Comando de inicio para la aplicación
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "rodelfims.wsgi:application"]
