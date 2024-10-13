@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-umavb1gnz#)8eki*2n&*ihv$*&!*2p!k0e65)3)%$ug9nu9^19'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -74,14 +74,15 @@ WSGI_APPLICATION = 'rodelfims.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE'),
-        'USER': os.environ.get('MYSQL_USER'),
-        'PASSWORD': os.environ.get('MYSQL_PASSWORD'),
-        'HOST': os.environ.get('MYSQL_HOST'),
-        'PORT': os.environ.get('MYSQL_PORT', '3306'),  # Usa el puerto por defecto si no está definido
+        'NAME': 'railway',
+        'USER': 'root',
+        'PASSWORD': 'uuWMMRKGoVoMEnaJjHvWZayEYLeFotNy',
+        'HOST': 'mysql.railway.internal',
+        'PORT': '3306',  # Usa el puerto por defecto si no está definido
     }
 }
 
