@@ -1,1 +1,1 @@
-web: gunicorn rodelfims.wsgi
+web: python manage.py migrate && gunicorn rodelfims.wsgi
