@@ -26,6 +26,8 @@ RUN pip install --upgrade pip \
 
 # Expone el puerto que usará la app
 EXPOSE 8000
+# Ejecuta collectstatic sin interacción
+RUN python manage.py collectstatic --noinput
 
 # Comando de inicio para la aplicación
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "rodelfims.wsgi:application"]
