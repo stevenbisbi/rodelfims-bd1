@@ -1,0 +1,35 @@
+{% extends "layouts/base.html" %}
+{% block content %}
+
+<main class="container m-t">
+    <div class="col-md-4 offset-md-4">
+      <form id="pelicula-form" action="" method="POST" class="card card-body mt-5">
+        <h1>Agregar Película</h1>
+        {% csrf_token %} {{pelicula_form.as_p}}
+
+        <h3>Agregar Actor</h3>
+        {{ actor_form.as_p }}
+
+        <button type="submit" name="add_actor" class="btn btn-secondary">
+            Añadir Otro Actor
+        </button>
+
+        <h4 class="mt-4">Actores Agregados:</h4>
+        <ul>
+            {% for actor in actores_agregados %}
+                <li>{{ actor.Nombre }} - {{ actor.Nacionalidad }} - {{ actor.Sexo }}</li>
+            {% empty %}
+                <li>No hay actores agregados.</li>
+            {% endfor %}
+        </ul>
+        <div class="d-flex justify-content-center my-2 py-2">
+            <button type="submit" class="btn button mt-3">Guardar Película</button>
+        </div>
+      </form>
+      <div class="d-flex justify-content-center my-2 py-2">
+        <a href="{% url 'administrador' %}" class="btn button mt-3">Volver a la lista</a>
+      </div>
+      
+    </div>
+</main>
+{% endblock %}

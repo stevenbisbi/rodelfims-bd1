@@ -7,5 +7,6 @@ urlpatterns = [
     path('signin/', views.signin, name='signin'),
     path('signup/', views.signup, name='signup'),
     path('ver/', views.mi_vista, name='ver'),
-    path('menu/', views.menu, name='menu'),
+    path('administrador/', views.admin, name='administrador'),
+    path('agregar_pelicula/', views.agregar_pelicula, name='agregar_pelicula'),
 ]

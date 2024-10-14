@@ -8,6 +8,8 @@ from django.db import connection
 from django.http import JsonResponse
 from .forms import PeliculaForm
 import random
+import mysql.connector
+from django.conf import settings
 
 # Create your views here.
 def home(request):
@@ -65,7 +67,92 @@ def peliculas(request):
     img_random = random.randint(1, 10)
     peliculas = obtener_datos()
     return render(request, 'alquiler.html', {'peliculas': peliculas, 'img_random':img_random})
-    
-def menu(request):
-    form = PeliculaForm()
-    return render(request, 'administrador.html', {'form':form})
+   
+def admin(request):
+    img_random = random.randint(1, 10)
+    peliculas = obtener_datos()
+    return render(request, 'administrador.html', {'peliculas': peliculas, 'img_random':img_random})
+
+
+def agregar_pelicula(request):
+    try:
+        conexion = mysql.connector.connect(
+            host=settings.DATABASES['default']['HOST'],
+            user=settings.DATABASES['default']['USER'],
+            password=settings.DATABASES['default']['PASSWORD'],
+            database=settings.DATABASES['default']['NAME'],
+            port=settings.DATABASES['default']['PORT']
+        )
+        cursor = conexion.cursor()
+    except mysql.connector.Error as err:
+        print(f"Error de conexión: {err}")
+        return render(request, "error.html", {"mensaje": "Error de conexión a la base de datos."})
+
+    pelicula_form = PeliculaForm(request.POST or None)
+
+    if request.method == 'POST':
+        if pelicula_form.is_valid():
+            pelicula_data = pelicula_form.cleaned_data
+            print(pelicula_data)  # Mostrar los datos en la consola
+
+            try:
+                # Insertar el director
+                director_query = """
+                    INSERT INTO Director (Nombre, Nacionalidad) 
+                    VALUES (%s, %s)
+                    ON DUPLICATE KEY UPDATE ID_Director = LAST_INSERT_ID(ID_Director);
+                """
+                director_data = (
+                    pelicula_data['Director'],
+                    pelicula_data['Nacionalidad_Director']
+                )
+                cursor.execute(director_query, director_data)
+                print("Director insertado o actualizado.")
+
+                # Obtener el ID del director
+                id_director = cursor.lastrowid
+                print(f"ID del director: {id_director}")
+
+                # Insertar la película
+                query_pelicula = """
+                    INSERT INTO Pelicula (Titulo, Fecha, Nacionalidad, Productora, ID_Director) 
+                    VALUES (%s, %s, %s, %s, %s)
+                """
+                datos_pelicula = (
+                    pelicula_data['Titulo'],
+                    pelicula_data['Fecha'],
+                    pelicula_data['Nacionalidad'],
+                    pelicula_data['Productora'],
+                    id_director
+                )
+                cursor.execute(query_pelicula, datos_pelicula)
+                print("Película insertada.")
+
+                # Obtener el ID de la película recién insertada
+                id_pelicula = cursor.lastrowid
+
+                # Insertar el actor
+                query_actor = """
+                    INSERT INTO Actor (Nombre, Nacionalidad, Sexo) 
+                    VALUES (%s, %s, %s)
+                """
+                actor_data = (
+                    pelicula_data['Actor_Nombre'],
+                    pelicula_data['Actor_Nacionalidad'],
+                    pelicula_data['Actor_Sexo']
+                )
+                cursor.execute(query_actor, actor_data)
+                print("Actor insertado.")
+
+                conexion.commit()  # Confirmar los cambios
+                print("Cambios confirmados.")
+            except mysql.connector.Error as e:
+                print(f"Error al insertar en la base de datos: {e}")
+                conexion.rollback()  # Deshacer cambios en caso de error
+
+    cursor.close()
+    conexion.close()
+
+    return render(request, "agregar_pelicula.html", {
+        "pelicula_form": pelicula_form,
+    })
