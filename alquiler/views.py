@@ -74,7 +74,7 @@ def admin(request):
     return render(request, 'administrador.html', {'peliculas': peliculas, 'img_random':img_random})
 
 
-def agregar_pelicula(request):
+#def agregar_pelicula(request):
     try:
         conexion = mysql.connector.connect(
             host=settings.DATABASES['default']['HOST'],
