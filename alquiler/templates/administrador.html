@@ -1,10 +1,41 @@
-{% extends "admin/base_site.html" %}
+{% extends "layouts/base.html" %}
 {% block content %}
-<h1>Agregar Película</h1>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary mt-3">Guardar</button>
-</form>
-<a href="../" class="btn btn-secondary mt-3">Volver a la lista</a>
+{% load static %}
+<main class="container m-t bg img-radius">
+    <div class="d-flex justify-content-center my-4 py-5">
+        <form action="{% url 'agregar_pelicula' %}" method="GET">
+            <button class="btn boton-main d-flex justify-content-center" type="submit">
+                Agregar película
+            </button>
+        </form>
+    </div>
+    <h1 class="text-center mb-4 titulo-bg">Películas</h1>
+    
+    <div class="row">
+        <h1>{{peliculas.Titulo}}</h1>
+        {% if peliculas %}
+            {% for pelicula in peliculas %}
+            <div class="col-md-4 my-3">
+                <div class="movie-card">
+                    <img src="{% static 'img/' %}{{ forloop.counter }}.jpg" alt="Poster de Película {{ pelicula.id }}" class="movie-image">
+                    <div class="movie-details">
+                        <h2 class="movie-title">{{ pelicula.Titulo }}</h2>
+                        <h5 class="movie-description">{{ pelicula.Fecha }}</h5>
+                        <p class="movie-description">Es una película increíble que no te puedes perder.</p>
+                        <h5>Nacionalidad:</h5>
+                        <h4 class="movie-atributes">{{ pelicula.Nacionalidad }}</h4>
+                        <h5>Productora:</h5>
+                        <h4 class="movie-atributes">{{ pelicula.Productora }}</h4>
+                        <button class="btn boton-main">Editar</button>
+                        <button class="btn boton-secundary">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <h1>NO hay pelicuas</h1>
+        {% endif %}
+    </div>
+</main>
+
 {% endblock %}
