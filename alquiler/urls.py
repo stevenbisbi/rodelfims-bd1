@@ -9,4 +9,6 @@ urlpatterns = [
     path('ver/', views.mi_vista, name='ver'),
     path('administrador/', views.admin, name='administrador'),
     path('agregar_pelicula/', views.agregar_pelicula, name='agregar_pelicula'),
+    path('borrar_pelicula/<int:id_pelicula>/', views.borrar_pelicula, name='borrar_pelicula'),
+
 ]

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
@@ -8,6 +8,7 @@ from django.db import connection
 from django.http import JsonResponse
 from .forms import PeliculaForm
 import random
+from django.contrib import messages
 import mysql.connector
 from django.conf import settings
 
@@ -158,6 +159,7 @@ def agregar_pelicula(request):
 
                 conexion.commit()  # Confirmar los cambios
                 print("Cambios confirmados.")
+                messages.success(request, "Película agregada con éxito.")
             except mysql.connector.Error as e:
                 print(f"Error al insertar en la base de datos: {e}")
                 conexion.rollback()  # Deshacer cambios en caso de error
@@ -169,3 +171,43 @@ def agregar_pelicula(request):
         "pelicula_form": pelicula_form,
     })
 
+def borrar_pelicula(request, id_pelicula):
+    if request.method == 'POST':
+        try:
+            # Conectar a la base de datos
+            conexion = mysql.connector.connect(
+                host=settings.DATABASES['default']['HOST'],
+                user=settings.DATABASES['default']['USER'],
+                password=settings.DATABASES['default']['PASSWORD'],
+                database=settings.DATABASES['default']['NAME'],
+                port=settings.DATABASES['default']['PORT']
+            )
+            cursor = conexion.cursor()
+        except mysql.connector.Error as err:
+            print(f"Error de conexión: {err}")
+            messages.error(request, "Error de conexión a la base de datos.")
+            return redirect('administrador')
+
+        try:
+            # Eliminar relaciones si es necesario
+            query_relacion = "DELETE FROM Película_Actor WHERE ID_Pelicula = %s;"
+            cursor.execute(query_relacion, (id_pelicula,))
+
+            # Eliminar la película
+            query_pelicula = "DELETE FROM Pelicula WHERE ID_Pelicula = %s;"
+            cursor.execute(query_pelicula, (id_pelicula,))
+
+            conexion.commit()  # Confirmar los cambios
+            messages.success(request, "Película eliminada con éxito.")
+        except mysql.connector.Error as e:
+            print(f"Error al eliminar: {e}")
+            conexion.rollback()  # Deshacer cambios en caso de error
+            messages.error(request, "Error al eliminar la película.")
+
+        cursor.close()
+        conexion.close()
+
+        # Redirigir a la página anterior o a otra
+        return redirect('administrador')
+
+    return redirect('administrador') # Si no es POST, redirige al inicio.

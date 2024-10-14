@@ -1,0 +1,23 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<main class="container mt-5">
+  <h1>Confirmar eliminación</h1>
+
+  <!-- Mostrar mensajes flash -->
+  {% if messages %}
+    <div class="alert alert-info mt-3">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <p>¿Estás seguro de que deseas eliminar esta película?</p>
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a href="{% url 'administrador' %}" class="btn btn-secondary">Cancelar</a>
+  </form>
+</main>
+{% endblock %}
