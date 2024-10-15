@@ -1,5 +1,39 @@
 {% extends "layouts/base.html" %}
 {% block content %}
 
-
+<main class="container m-t bg img-radius">
+    <h1 class="text-center mb-4 titulo-bg py-5">Mis Películas Alquiladas</h1>
+    
+    <div class="row">
+        {% if alquileres %}
+            {% for alquiler in alquileres %}
+            <h1>{{ alquiler.En_Propiedad }}</h1>
+            <!-- <img src="https://via.placeholder.com/300x400" -->
+            <div class="col-md-4 my-3 color-form">
+                <div class="movie-card">
+                    <h3>En propiedad:</h3>
+                    <p>
+                        {% if alquiler.4 == 1 %}
+                            Sí
+                        {% else %}
+                            No
+                        {% endif %}
+                    </p> <!-- En_Propiedad -->
+                    <h3>Pelicula:</h3>
+                    <p>{{ alquiler.0 }}</p> <!-- Pelicula -->
+                    <h3>Estado:</h3>
+                    <p>{{ alquiler.1 }}</p> <!-- Estado_Conservacion -->
+                    <h3>Fecha de alquiler:</h3>
+                    <p>{{ alquiler.2 }}</p> <!-- Fecha_comienzo -->
+                    <h3>Fecha de devolución:</h3>
+                    <p>{{ alquiler.3 }}</p> <!-- Fecha_devolucion -->
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <h1 class="color-form text-center" >No hay alquileres</h1>
+            <div style="height: 70rem;"></div>
+        {% endif %}
+    </div>
+</main>
 {% endblock %}

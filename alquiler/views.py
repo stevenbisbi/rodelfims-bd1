@@ -218,6 +218,7 @@ def admin(request):
     peliculas = obtener_datos()
     return render(request, 'administrador.html', {'peliculas': peliculas, 'img_random':img_random})
 
+@login_required 
 @with_db_connection
 def agregar_pelicula(request, cursor, conexion):
     pelicula_form = PeliculaForm(request.POST or None)
@@ -230,9 +231,10 @@ def agregar_pelicula(request, cursor, conexion):
             try:
                 # Insertar el director
                 director_query = """
-                    INSERT INTO Director (Nombre, Nacionalidad) 
+                    INSERT INTO Director (Nombre, Nacionalidad)
                     VALUES (%s, %s)
-                    ON DUPLICATE KEY UPDATE ID_Director = LAST_INSERT_ID(ID_Director);
+                    ON DUPLICATE KEY UPDATE 
+                    Nacionalidad = VALUES(Nacionalidad);
                 """
                 director_data = (
                     pelicula_data['Director'],
@@ -281,7 +283,6 @@ def agregar_pelicula(request, cursor, conexion):
                 query_actor_pelicula = """
                 INSERT INTO Pelicula_Actor (ID_Pelicula, ID_Actor, Principal)
                 VALUES(%s, %s, %s)"""
-                
                 datos_actor_pelicula =(
                     id_pelicula,
                     id_actor,
@@ -289,6 +290,17 @@ def agregar_pelicula(request, cursor, conexion):
                 )
                 cursor.execute(query_actor_pelicula, datos_actor_pelicula)
                 print('Actor pelicula insertado')
+                #Insertar ejemplar
+
+                data_estado= (
+                    pelicula_data['Estado'],
+                    id_pelicula
+                )
+                query_estado ="""
+                    INSERT INTO Ejemplar (Estado_Conservacion, ID_Pelicula)
+                    VALUES(%s, %s)"""
+                cursor.execute(query_estado, data_estado)
+                print('Ejemplar insertado correctamente')
                 # Confirmar los cambios en la base de datos
                 conexion.commit()
                 print("Cambios confirmados.")
@@ -298,6 +310,8 @@ def agregar_pelicula(request, cursor, conexion):
                 conexion.rollback()  # Deshacer los cambios en caso de error
 
     return render(request, "agregar_pelicula.html", {"pelicula_form": pelicula_form})
+
+
 
 def borrar_pelicula(request, id_pelicula):
     if request.method == 'POST':
@@ -440,4 +454,103 @@ def editar_pelicula(request, id_pelicula, cursor, conexion):
 
     return render(request, "editar_pelicula.html", {"pelicula_form": pelicula_form})
 
+@login_required 
+@with_db_connection
+def mis_alquileres(request, cursor, conexion):
+    #obtengo id del usuario logiado
+    user_id = request.user.id
+    
+    #obtengo DNI del usuario logeado
+    query_socio = """ 
+        SELECT DNI FROM Socio
+        WHERE usuario_id = %s"""
+    cursor.execute(query_socio, (user_id,))
+    resultado = cursor.fetchone()
+    if resultado:
+        dni = resultado[0]  # Extrae el DNI del primer valor de la tupla
+    else:
+        return redirect('error')  # Redirigir si no se encuentra el socio
+    
+    query_alquileres = """
+        SELECT 
+            p.Titulo AS Pelicula,
+            e.Estado_Conservacion,
+            a.Fecha_comienzo,
+            a.Fecha_devolucion,
+            CASE 
+                WHEN a.Fecha_devolucion IS NULL THEN 1 
+                ELSE 0                                  
+            END AS En_Propiedad
+        FROM 
+            Alquiler a
+        JOIN 
+            Ejemplar e ON a.ID_Ejemplar = e.ID_Ejemplar
+        JOIN 
+            Pelicula p ON e.ID_Pelicula = p.ID_Pelicula
+        WHERE 
+            a.DNI_Socio = %s
+        ORDER BY 
+            En_Propiedad DESC;
 
+    """
+    cursor.execute(query_alquileres, (dni,))
+    alquileres = cursor.fetchall()  # Lista de tuplas con los alquileres
+    print(alquileres)
+    return render(request, 'mis_alquileres.html', {'alquileres': alquileres})
+
+def error(request):
+    return render(request, 'error.html')
+
+@with_db_connection
+def alquilar_pelicula(request, cursor, conexion, movie_id):
+    if request.method == 'POST':
+        # Obtengo el ID del usuario logueado
+        user_id = request.user.id
+
+        # Verificar si el usuario es un socio registrado
+        query_socio = """SELECT DNI, Avalado_por FROM Socio WHERE usuario_id = %s"""
+        cursor.execute(query_socio, (user_id,))
+        resultado = cursor.fetchone()  # Cambiar a fetchone para un solo resultado
+
+        if not resultado:
+            return JsonResponse({'message': 'El usuario no está registrado como Socio.'}, status=200)
+
+        dni, socio_valador = resultado
+
+        # Verificar si el socio tiene un avalador
+        if socio_valador:
+            # Obtener un ejemplar de la película
+            query_ejemplar = '''
+                SELECT ID_Ejemplar FROM Ejemplar WHERE ID_Pelicula = %s LIMIT 1
+            '''
+            cursor.execute(query_ejemplar, (movie_id,))
+            ejemplar = cursor.fetchone()  # Obtenemos solo un ejemplar disponible
+
+            if not ejemplar:
+                return JsonResponse({'message': 'No hay ejemplares disponibles para esta película.'}, status=200)
+
+            ejemplar_id = ejemplar[0]
+
+            # Verificar si el ejemplar está disponible
+            query_disponible = '''
+                SELECT Fecha_devolucion FROM Alquiler WHERE ID_Ejemplar = %s AND Fecha_devolucion IS NULL
+            '''
+            cursor.execute(query_disponible, (ejemplar_id,))
+            disponible = cursor.fetchone()
+
+            if not disponible:  # Si no hay alquileres pendientes, está disponible
+                # Insertar el nuevo alquiler
+                query_alquiler = '''
+                    INSERT INTO Alquiler (Fecha_comienzo, ID_Ejemplar, DNI_Socio)
+                    VALUES (NOW(), %s, %s)
+                '''
+                cursor.execute(query_alquiler, (ejemplar_id, dni))
+                conexion.commit()
+
+                print("Película Alquilada!")
+                messages.success(request, "Película alquilada con éxito.")
+                return JsonResponse({'message': 'Alquiler exitoso.'}, status=200)
+            else:
+                return JsonResponse({'message': 'La película no se encuentra disponible.'}, status=200)
+
+    return JsonResponse({'error': 'Método no permitido.'}, status=405)

@@ -15,7 +15,7 @@
         <h1>Agregar Película</h1>
         {% csrf_token %} {{pelicula_form.as_p}}
 
-        <h3>Agregar Actor</h3>
+        <!-- <h3>Agregar Actor</h3>
         {{ actor_form.as_p }}
 
         <button type="submit" name="add_actor" class="btn btn-secondary">
@@ -29,7 +29,7 @@
             {% empty %}
                 <li>No hay actores agregados.</li>
             {% endfor %}
-        </ul>
+        </ul> -->
         <div class="d-flex justify-content-center my-2 py-2">
             <button type="submit" class="btn button mt-3">Guardar Película</button>
         </div>

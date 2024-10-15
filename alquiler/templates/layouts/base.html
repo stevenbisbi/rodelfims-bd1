@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Rodelfims</title>
     <link rel="icon" href="{% static 'img/icon.ico' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/normalize.css' %}">
@@ -18,6 +19,7 @@
             <li><a href="#">Contacto</a></li>
             {% if user.is_authenticated %}
             <li><a href="/alquiler">Alquiler</a></li>
+            <li><a href="/mis_alquileres">Mis Alquileres</a></li>
             <li><a href="/signout">Cerrar Sesion</a></li>
             {% else %}
             <li><a href="/peliculas">Peliculas</a></li>

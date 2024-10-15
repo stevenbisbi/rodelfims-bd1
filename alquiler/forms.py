@@ -5,6 +5,14 @@ class PeliculaForm(forms.Form):
         max_length=200, 
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
+    Estado = forms.ChoiceField(
+        choices=[
+        ('excelente', 'Excelente'),
+        ('bueno', 'Bueno'),
+        ('regular', 'Regular')
+    ],
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
     Fecha = forms.DateField(
         widget=forms.DateInput(attrs={'class': 'form-control', 'type': 'date'})
     )

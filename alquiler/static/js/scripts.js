@@ -23,3 +23,29 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const showButtons1 = document.querySelectorAll('[id^="showFormButton1"]');
+    const formContainers1 = document.querySelectorAll('[id^="formContainer1"]');
+
+    showButtons1.forEach((button, index) => {
+        button.addEventListener('click', function() {
+            // Oculta todos los formularios
+            formContainers1.forEach(container => {
+                container.classList.add('hidden');
+            });
+
+            // Muestra el contenedor del formulario correspondiente al botón clickeado
+            const formContainer = formContainers1[index];
+            formContainer.classList.remove('hidden');
+        });
+
+        const closeButton1 = formContainers1[index].querySelector('.close-button1');
+        if (closeButton1) {
+            closeButton1.addEventListener('click', function() {
+                const formContainer = formContainers1[index];
+                formContainer.classList.add('hidden');
+            });
+        }
+    });
+});
