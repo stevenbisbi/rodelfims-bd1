@@ -40,3 +40,17 @@ class PeliculaForm(forms.Form):
         choices=[('M', 'Masculino'), ('F', 'Femenino')],
         widget=forms.Select(attrs={'class': 'form-control'})
     )
+
+
+class SocioForm(forms.Form):
+    email = forms.EmailField(label="Correo electrónico", max_length=100)
+    Dni = forms.CharField(label="DNI", max_length=20)
+    Nombre = forms.CharField(label="Nombre", max_length=100)
+    Direccion = forms.CharField(label="Dirección", max_length=255)
+    Telefono = forms.CharField(label="Teléfono", max_length=15, required=False)
+    Avalado_por = forms.ChoiceField(choices=[])
+
+    def __init__(self, *args, **kwargs):
+        socios = kwargs.pop('socios', [])
+        super().__init__(*args, **kwargs)
+        self.fields['Avalado_por'].choices = socios

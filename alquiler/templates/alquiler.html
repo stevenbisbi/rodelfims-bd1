@@ -17,22 +17,36 @@
         <h1 class="text-center mb-4 titulo-bg">Selección de Películas</h1>
         
         <div class="row">
-            <h1>{{peliculas.Titulo}}</h1>
-            {% if peliculas %}
-                {% for pelicula in peliculas %}
+            <h1>{{detalles.Titulo}}</h1>
+            {% if detalles %}
+                {% for detalle in detalles %}
+                <!-- <img src="https://via.placeholder.com/300x400" -->
                 <div class="col-md-4 my-3">
                     <div class="movie-card">
-                        <img src="{% static 'img/' %}{{ forloop.counter }}.jpg" alt="Poster de Película {{ pelicula.id }}" class="movie-image">
+                        <img src="{% static 'img/' %}{{ forloop.counter }}.jpg" alt="Poster de Película {{ detalle.id }}" class="movie-image">
                         <div class="movie-details">
-                            <h2 class="movie-title">{{ pelicula.Titulo }}</h2>
-                            <h5 class="movie-description">{{ pelicula.Fecha }}</h5>
+                            <h2 class="movie-title">{{ detalle.Titulo }}</h2>
                             <p class="movie-description">Es una película increíble que no te puedes perder.</p>
-                            <h5>Nacionalidad:</h5>
-                            <h4 class="movie-atributes">{{ pelicula.Nacionalidad }}</h4>
-                            <h5>Productora:</h5>
-                            <h4 class="movie-atributes">{{ pelicula.Productora }}</h4>
-                            <button class="btn boton-main">Agregar al Carrito</button>
-                            <button class="btn boton-secundary">Ver Detalles</button>
+                            <button class="btn boton-main">Alquilar</button>
+                            <button id="showFormButton-{{ forloop.counter }}" class="btn boton-secundary">Ver Detalles</button>
+                            <div id="formContainer-{{ forloop.counter }}" class="form-container hidden">
+                                <button class="close-button">&times;</button>
+                                <h2 class="movie-title">{{ detalle.Titulo }}</h2>
+                                <h5>Nacionalidad:</h5>
+                                <h4 class="movie-atributes">{{ detalle.Nacionalidad }}</h4>
+                                <h5>Disponibilidad:</h5>
+                                <h4 class="movie-atributes">{{ detalle.Disponibilidad }}</h4>
+                                <h5>Productora:</h5>
+                                <h4 class="movie-atributes">{{ detalle.Productora }}</h4>
+                                <h5>Fecha:</h5>
+                                <h5 class="movie-description">{{ detalle.Fecha }}</h5>
+                                <h5>Director:</h5>
+                                <h4 class="movie-atributes">{{ detalle.Director }}</h4>
+                                <h5>Actores:</h5>
+                                <h4 class="movie-atributes">{{ detalle.Actores }}</h4>
+                                <h5>Estado:</h5>
+                                <h4 class="movie-atributes">{{ detalle.Estado_Conservacion }}</h4>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -42,7 +56,7 @@
             {% endif %}
         </div>
     </section>
-
+    <script src="{% static 'js/scripts.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
