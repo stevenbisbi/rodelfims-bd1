@@ -18,6 +18,7 @@
             <li><a href="/">Inicio</a></li>
             <li><a href="#">Contacto</a></li>
             {% if user.is_authenticated %}
+            <li><a href="/administrador">administrador</a></li>
             <li><a href="/alquiler">Alquiler</a></li>
             <li><a href="/mis_alquileres">Mis Alquileres</a></li>
             <li><a href="/signout">Cerrar Sesion</a></li>
