@@ -43,13 +43,18 @@
                         <h4 class="movie-atributes">{{ pelicula.Productora }}</h4>
 
                         <div class="d-flex">
-                            <button class="btn boton-main">Editar</button>
-                        <form method="POST" action="{% url 'borrar_pelicula' pelicula.ID_Pelicula %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn button boton-secundary btn-sm">
-                                Eliminar
-                            </button>
-                        </form>
+                            <form method="POST" action="{% url 'editar_pelicula' pelicula.ID_Pelicula %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn boton-main btn-sm">
+                                    Editar
+                                </button>
+                            </form>
+                            <form method="POST" action="{% url 'borrar_pelicula' pelicula.ID_Pelicula %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn button boton-secundary btn-sm">
+                                    Eliminar
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

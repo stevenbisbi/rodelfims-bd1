@@ -50,18 +50,30 @@ def home(request):
 
 def signin(request):
     if request.method == 'GET':
-        return render(request, 'signin.html', {'form': AuthenticationForm} )
+        return render(request, 'signin.html', {'form': AuthenticationForm()})
     else:
-        user = authenticate(
-            request, username=request.POST['username'], password=request.POST['password'])
-        
+        # Verifica si el email corresponde a un usuario
+        try:
+            username = User.objects.get(email=request.POST['email']).username
+        except User.DoesNotExist:
+            return render(request, 'signin.html', {
+                'form': AuthenticationForm(), 
+                'error': 'Correo no registrado'
+            })
+
+        # Autentica usando el username recuperado
+        user = authenticate(request, username=username, password=request.POST['password'])
+
         if user is None:
             return render(request, 'signin.html', {
-                'form': AuthenticationForm, 'error': 'Nombre de usuario o contraseña incorrectos'
+                'form': AuthenticationForm(), 'error': 'Correo o contraseña incorrectos'
             })
         else:
             login(request, user)
-            return redirect('home')
+            if user.is_superuser:
+                return redirect('administrador')  # Página para superusuario
+            return redirect('home')  # Página para usuarios regulares
+        
 @with_db_connection
 def signup(request, *args, **kwargs):
     cursor = kwargs.get('cursor')
@@ -87,7 +99,7 @@ def signup(request, *args, **kwargs):
 
                     if not resultado:
                         print('socio no existe')
-                        # Crear el usuario usando correo como username
+                        # Crear el usuario usando correo como email
                         user = User.objects.create_user(
                         username=socioForm.cleaned_data['email'],
                         email=socioForm.cleaned_data['email'],
@@ -100,8 +112,8 @@ def signup(request, *args, **kwargs):
                         """
                         socio_data = (
                             socioForm.cleaned_data['Dni'],
-                            socioForm.cleaned_data['Nombre'],
-                            socioForm.cleaned_data['Direccion'],
+                            socioForm.cleaned_data['Nombre'].title(),
+                            socioForm.cleaned_data['Direccion'].title(),
                             socioForm.cleaned_data['Telefono'],
                             socioForm.cleaned_data['Avalado_por'],
                             user.id  # Aquí guardas el ID del usuario recién creado
@@ -250,7 +262,6 @@ def agregar_pelicula(request, cursor, conexion):
 
                 # Obtener el ID de la película recién insertada
                 id_pelicula = cursor.lastrowid
-
                 # Insertar el actor
                 query_actor = """
                     INSERT INTO Actor (Nombre, Nacionalidad, Sexo) 
@@ -263,7 +274,21 @@ def agregar_pelicula(request, cursor, conexion):
                 )
                 cursor.execute(query_actor, actor_data)
                 print("Actor insertado.")
-
+                # Obtener ID del Actor
+                id_actor = cursor.lastrowid
+                #Insertar autor_pelicula
+                
+                query_actor_pelicula = """
+                INSERT INTO Pelicula_Actor (ID_Pelicula, ID_Actor, Principal)
+                VALUES(%s, %s, %s)"""
+                
+                datos_actor_pelicula =(
+                    id_pelicula,
+                    id_actor,
+                    1
+                )
+                cursor.execute(query_actor_pelicula, datos_actor_pelicula)
+                print('Actor pelicula insertado')
                 # Confirmar los cambios en la base de datos
                 conexion.commit()
                 print("Cambios confirmados.")
@@ -293,7 +318,7 @@ def borrar_pelicula(request, id_pelicula):
 
         try:
             # Eliminar relaciones si es necesario
-            query_relacion = "DELETE FROM Película_Actor WHERE ID_Pelicula = %s;"
+            query_relacion = "DELETE FROM Pelicula_Actor WHERE ID_Pelicula = %s;"
             cursor.execute(query_relacion, (id_pelicula,))
 
             # Eliminar la película
@@ -340,3 +365,79 @@ def alquileres_socio(request, cursor, conexion):
 def peliculas(request):
     detalles = obetener_detalles()
     return render(request, 'peliculas.html', {'detalles':detalles})
+
+@with_db_connection
+def editar_pelicula(request, id_pelicula, cursor, conexion):
+    # Cargar los datos actuales de la película
+    cursor.execute("""
+        SELECT p.Titulo, p.Fecha, p.Nacionalidad, p.Productora, d.Nombre AS Director, d.Nacionalidad AS Nacionalidad_Director
+        FROM Pelicula p
+        JOIN Director d ON p.ID_Director = d.ID_Director
+        WHERE p.ID_Pelicula = %s
+    """, (id_pelicula,))
+
+    row = cursor.fetchone()
+    column_names = [column[0] for column in cursor.description]
+    pelicula_actual = dict(zip(column_names, row)) if row else None
+
+    if request.method == 'POST':
+        pelicula_form = PeliculaForm(request.POST)
+        if pelicula_form.is_valid():
+            pelicula_data = pelicula_form.cleaned_data
+            
+            # Extraer datos del formulario
+            director_nombre = request.POST.get('Director')  # Nombre del director del formulario
+            director_nacionalidad = request.POST.get('Nacionalidad_Director')  # Nacionalidad del director del formulario
+            print(director_nombre)
+            # Verificar si el director ya existe
+            cursor.execute("""
+                SELECT ID_Director FROM Director 
+                WHERE Nombre = %s AND Nacionalidad = %s
+            """, (director_nombre, director_nacionalidad))
+            results = cursor.fetchall()
+            existing_director = results[0] if results else None
+
+            if not existing_director:
+                # Si no existe, insertar el nuevo director
+                cursor.execute("""
+                    INSERT INTO Director (Nombre, Nacionalidad) 
+                    VALUES (%s, %s)
+                """, (director_nombre, director_nacionalidad))
+                conexion.commit()  # Confirmar la inserción
+
+                # Obtener el ID del nuevo director
+                cursor.execute("SELECT LAST_INSERT_ID()")
+                new_director_id = cursor.fetchone()[0]
+            else:
+                # Si ya existe, usar el ID existente
+                new_director_id = existing_director[0]
+
+            # Actualizar la película con el ID del director
+            query_update = """
+                UPDATE Pelicula 
+                SET Titulo = %s, Fecha = %s, Nacionalidad = %s, Productora = %s, ID_Director = %s
+                WHERE ID_Pelicula = %s
+            """
+            datos_actualizados = (
+                pelicula_data['Titulo'],
+                pelicula_data['Fecha'],
+                pelicula_data['Nacionalidad'],
+                pelicula_data['Productora'],
+                new_director_id,  # Usar el ID del director (nuevo o existente)
+                id_pelicula
+            )
+            cursor.execute(query_update, datos_actualizados)
+            conexion.commit()
+            messages.success(request, "Película actualizada con éxito.")
+            return redirect('administrador')  # Redirigir después de la actualización
+        else:
+            print(pelicula_form.errors)  # Verifica los errores
+    else:
+        if pelicula_actual:
+            pelicula_form = PeliculaForm(initial=pelicula_actual)
+        else:
+            pelicula_form = PeliculaForm()  # Crear formulario vacío si no hay datos
+
+    return render(request, "editar_pelicula.html", {"pelicula_form": pelicula_form})
+
+

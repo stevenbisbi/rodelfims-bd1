@@ -10,6 +10,7 @@ urlpatterns = [
     path('administrador/', views.admin, name='administrador'),
     path('alquileres_socio/', views.alquileres_socio, name='alquileres_socio'),
     path('agregar_pelicula/', views.agregar_pelicula, name='agregar_pelicula'),
+    path('editar_pelicula/<int:id_pelicula>/', views.editar_pelicula, name='editar_pelicula'),
     path('borrar_pelicula/<int:id_pelicula>/', views.borrar_pelicula, name='borrar_pelicula'),
     path('peliculas/', views.peliculas, name='peliculas'),
 
