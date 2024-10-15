@@ -1,0 +1,47 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block content %}
+
+<main class="container m-t bg img-radius">
+    <h1 class="text-center mb-4 titulo-bg">Selección de Películas</h1>
+    
+    <div class="row">
+        {% if detalles %}
+            {% for detalle in detalles %}
+            <!-- <img src="https://via.placeholder.com/300x400" -->
+            <div class="col-md-4 my-3">
+                <div class="movie-card">
+                    <img src="{% static 'img/' %}{{ forloop.counter }}.jpg" alt="Poster de Película {{ detalle.id }}" class="movie-image">
+                    <div class="movie-details">
+                        <h2 class="movie-title">{{ detalle.Titulo }}</h2>
+                        <p class="movie-description">Es una película increíble que no te puedes perder.</p>
+                        <a href="{% url 'alquiler' %}" class="btn boton-main btn-lg">Alquilar</a>
+                        <button id="showFormButton-{{ forloop.counter }}" class="btn boton-secundary">Ver Detalles</button>
+                        <div id="formContainer-{{ forloop.counter }}" class="form-container hidden">
+                            <button class="close-button">&times;</button>
+                            <h2 class="movie-title">{{ detalle.Titulo }}</h2>
+                            <h5>Nacionalidad:</h5>
+                            <h4 class="movie-atributes">{{ detalle.Nacionalidad }}</h4>
+                            <h5>Disponibilidad:</h5>
+                            <h4 class="movie-atributes">{{ detalle.Disponibilidad }}</h4>
+                            <h5>Productora:</h5>
+                            <h4 class="movie-atributes">{{ detalle.Productora }}</h4>
+                            <h5>Fecha:</h5>
+                            <h5 class="movie-description">{{ detalle.Fecha }}</h5>
+                            <h5>Director:</h5>
+                            <h4 class="movie-atributes">{{ detalle.Director }}</h4>
+                            <h5>Actores:</h5>
+                            <h4 class="movie-atributes">{{ detalle.Actores }}</h4>
+                            <h5>Estado:</h5>
+                            <h4 class="movie-atributes">{{ detalle.Estado_Conservacion }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <h1>NO hay pelicuas</h1>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

@@ -47,10 +47,6 @@ def home(request):
     #actores = Actor.objects.all()
     return render(request, 'home.html')
 
-#@login_required
-def alquiler(request):
-    #peliculas = Pelicula.objects.all()
-    return render(request, 'alquiler.html',)
 
 def signin(request):
     if request.method == 'GET':
@@ -169,7 +165,7 @@ def obetener_detalles():
                     D.Nombre AS Director,
                     GROUP_CONCAT(A.Nombre || CASE WHEN PA.Principal THEN ' (Principal)' ELSE '' END SEPARATOR ', ') AS Actores,
                     E.ID_Ejemplar,
-                    E.Estado_Conservación,
+                    E.Estado_Conservacion,
                     CASE 
                         WHEN COUNT(AL.ID_Ejemplar) > 0 AND MAX(AL.Fecha_devolucion) IS NULL THEN 'No Disponible'
                         ELSE 'Disponible'
@@ -188,7 +184,7 @@ def obetener_detalles():
                     P.Productora, 
                     P.Fecha, 
                     D.Nombre, 
-                    E.Estado_Conservación
+                    E.Estado_Conservacion
                 LIMIT 1000;
             ''')
         columns = [col[0] for col in cursor.description]  # Nombres de las columnas
@@ -198,11 +194,12 @@ def obetener_detalles():
     except Exception as e:
         print(f"Error al obtener datos: {e}")
         return []
-    
-def peliculas(request):
+
+@login_required   
+def alquiler(request):
     img_random = random.randint(1, 10)
     detalles = obetener_detalles()
-    return render(request, 'alquiler.html', {'peliculas': peliculas, 'detalles':detalles})
+    return render(request, 'alquiler.html', {'detalles':detalles})
    
 def admin(request):
     img_random = random.randint(1, 10)
@@ -317,3 +314,29 @@ def borrar_pelicula(request, id_pelicula):
         return redirect('administrador')
 
     return redirect('administrador') # Si no es POST, redirige al inicio.
+@with_db_connection
+def alquileres_socio(request, cursor, conexion):
+    try:
+        cursor.execute('''
+            SELECT 
+                Socio.Nombre AS Nombre_Socio,
+                Pelicula.Titulo,
+                Ejemplar.Estado_Conservacion,
+                Alquiler.Fecha_comienzo
+            FROM Alquiler
+            JOIN Socio ON Alquiler.DNI_Socio = Socio.DNI
+            JOIN Ejemplar ON Alquiler.ID_Ejemplar = Ejemplar.ID_Ejemplar
+            JOIN Pelicula ON Ejemplar.ID_Pelicula = Pelicula.ID_Pelicula
+            WHERE Alquiler.Fecha_devolucion IS NULL;
+            ''')
+        columns = [col[0] for col in cursor.description]  # Nombres de las columnas
+        alquileres = [dict(zip(columns, row)) for row in cursor.fetchall()]
+        print(alquileres)  # Imprime los datos para verificar
+        return render(request, 'alquiler_pelicula.html', {'alquileres': alquileres})
+    except Exception as e:
+            print(f"Error al obtener datos: {e}")
+            return []
+
+def peliculas(request):
+    detalles = obetener_detalles()
+    return render(request, 'peliculas.html', {'detalles':detalles})

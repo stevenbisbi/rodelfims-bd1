@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if messages %}
-    <ul class="messages m-t d-flex justify-content-center">
+    <ul class="messages m-t d-flex justify-content-center m-t">
         {% for message in messages %}
             <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
         {% endfor %}
@@ -14,6 +14,11 @@
         <form action="{% url 'agregar_pelicula' %}" method="GET">
             <button class="btn boton-main d-flex justify-content-center" type="submit">
                 Agregar película
+            </button>
+        </form>
+        <form action="{% url 'alquileres_socio' %}" method="GET">
+            <button class="btn boton-main d-flex justify-content-center" type="submit">
+                Ver alquileres
             </button>
         </form>
     </div>

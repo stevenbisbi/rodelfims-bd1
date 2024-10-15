@@ -15,11 +15,12 @@
         <h1>Rodelfims</h1>
         <ul>
             <li><a href="/">Inicio</a></li>
-            <li><a href="/alquiler">Alquiler</a></li>
             <li><a href="#">Contacto</a></li>
             {% if user.is_authenticated %}
+            <li><a href="/alquiler">Alquiler</a></li>
             <li><a href="/signout">Cerrar Sesion</a></li>
             {% else %}
+            <li><a href="/peliculas">Peliculas</a></li>
             <li><a href="/signin">Iniciar Sesion</a></li>
             {% endif %}
         </ul>
