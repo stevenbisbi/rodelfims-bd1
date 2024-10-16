@@ -47,5 +47,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 formContainer.classList.add('hidden');
             });
         }
+        
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const showButtons2 = document.querySelectorAll('[id^="showFormButton2"]');
+    const formContainers2 = document.querySelectorAll('[id^="formContainer2"]');
+
+    showButtons2.forEach((button, index) => {
+        button.addEventListener('click', function() {
+            // Oculta todos los formularios
+            formContainers2.forEach(container => {
+                container.classList.add('hidden');
+            });
+
+            // Muestra el contenedor del formulario correspondiente al botón clickeado
+            const formContainer = formContainers2[index];
+            formContainer.classList.remove('hidden');
+        });
+
+        const closeButton2 = formContainers2[index].querySelector('.close-button2');
+        if (closeButton2) {
+            closeButton2.addEventListener('click', function() {
+                const formContainer = formContainers2[index];
+                formContainer.classList.add('hidden');
+            });
+        }
+        
     });
 });

@@ -7,10 +7,8 @@
     <div class="row">
         {% if alquileres %}
             {% for alquiler in alquileres %}
-            <h1>{{ alquiler.En_Propiedad }}</h1>
-            <!-- <img src="https://via.placeholder.com/300x400" -->
             <div class="col-md-4 my-3 color-form">
-                <div class="movie-card">
+                <div class="movie-card p-4">
                     <h3>En propiedad:</h3>
                     <p>
                         {% if alquiler.4 == 1 %}
@@ -18,20 +16,45 @@
                         {% else %}
                             No
                         {% endif %}
-                    </p> <!-- En_Propiedad -->
+                    </p>
                     <h3>Pelicula:</h3>
-                    <p>{{ alquiler.0 }}</p> <!-- Pelicula -->
+                    <p>{{ alquiler.0 }}</p>
                     <h3>Estado:</h3>
-                    <p>{{ alquiler.1 }}</p> <!-- Estado_Conservacion -->
+                    <p>{{ alquiler.1 }}</p>
                     <h3>Fecha de alquiler:</h3>
-                    <p>{{ alquiler.2 }}</p> <!-- Fecha_comienzo -->
+                    <p>{{ alquiler.2 }}</p>
                     <h3>Fecha de devolución:</h3>
-                    <p>{{ alquiler.3 }}</p> <!-- Fecha_devolucion -->
+                    <p>{{ alquiler.3 }}</p>
+
+                    {% if alquiler.4 == 1 %}
+                        <div>
+                            <button id="showFormButton2-{{ forloop.counter }}" class="btn boton-main">Devolver</button>
+                            <!-- Modal de confirmación -->
+                            <div id="formContainer2-{{ forloop.counter }}" class="form-container hidden">
+                                <div class="modal-dialog">
+                                    <div class="modal-content color-form">
+                                        <div class="modal-body">
+                                            ¿Deseas devolver esta película?
+                                            <H3>{{ alquiler.0 }}</H3>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn  btn-secondary close-button2 mx-2" data-bs-dismiss="modal">NO</button>
+                                            <form action="{% url 'devolver_pelicula'  alquiler.4  %}" method="POST" class="devolver-form">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-primary mx-2">DEVOLVER</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
+            
             {% endfor %}
         {% else %}
-            <h1 class="color-form text-center" >No hay alquileres</h1>
+            <h1 class="color-form text-center">No hay alquileres</h1>
             <div style="height: 70rem;"></div>
         {% endif %}
     </div>

@@ -16,4 +16,5 @@ urlpatterns = [
     path('mis_alquileres/', views.mis_alquileres, name='mis_alquileres'),
     path('error/', views.error, name='error'),
     path('alquilar/<int:movie_id>/', views.alquilar_pelicula, name='alquilar'),
+    path('devolver_pelicula/<int:id>', views.devolver_pelicula, name='devolver_pelicula'),
 ]

@@ -9,6 +9,7 @@ from django.db import connection
 from django.http import JsonResponse
 from .forms import PeliculaForm, SocioForm
 import random
+import datetime
 from django.contrib import messages
 import mysql.connector
 from django.conf import settings
@@ -477,6 +478,7 @@ def mis_alquileres(request, cursor, conexion):
             e.Estado_Conservacion,
             a.Fecha_comienzo,
             a.Fecha_devolucion,
+            p.ID_Pelicula,
             CASE 
                 WHEN a.Fecha_devolucion IS NULL THEN 1 
                 ELSE 0                                  
@@ -554,3 +556,25 @@ def alquilar_pelicula(request, cursor, conexion, movie_id):
                 return JsonResponse({'message': 'La película no se encuentra disponible.'}, status=200)
 
     return JsonResponse({'error': 'Método no permitido.'}, status=405)
+
+
+@login_required 
+@with_db_connection
+def devolver_pelicula(request, id, cursor, conexion):
+    if request.method == "POST":
+        dni = request.POST.get('dni')
+        id_alquiler = request.POST.get('id_alquiler')
+        
+        # Actualiza la fecha de devolución a la fecha actual
+        fecha_devolucion = datetime.date.today()
+        query_actualizar = """
+            UPDATE Alquiler
+            SET Fecha_devolucion = %s
+            WHERE DNI_Socio = %s AND ID_Alquiler = %s;
+        """
+        cursor.execute(query_actualizar, (fecha_devolucion, dni, id_alquiler))
+        conexion.commit()  
+        
+        return redirect('mis_alquileres')  
+
+    return redirect('error')  
