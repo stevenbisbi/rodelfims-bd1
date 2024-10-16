@@ -18,7 +18,7 @@
         
         <div class="row">
             {% if detalles %}
-                {% for detalle in detalles %}
+                {% for detalle in detalles %} {% if detalle.Disponibilidad == 'No Disponible' %}
                 <!-- <img src="https://via.placeholder.com/300x400" -->
                 <div class="col-md-4 my-3">
                     <div class="movie-card">
@@ -67,6 +67,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 {% endfor %}
             {% else %}
                 <h1>NO hay pelicuas</h1>
