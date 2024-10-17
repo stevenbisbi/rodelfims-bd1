@@ -117,7 +117,7 @@ def signup(request, *args, **kwargs):
                             socioForm.cleaned_data['Direccion'].title(),
                             socioForm.cleaned_data['Telefono'],
                             socioForm.cleaned_data['Avalado_por'],
-                            user.id  # Aquí guardas el ID del usuario recién creado
+                            user.id  # usuario recién creado
                         )
                         print(f"Consulta: {socio_query}")
                         print(f"Datos enviados: {socio_data}")
@@ -176,7 +176,7 @@ def obetener_detalles():
                     P.Productora,
                     P.Fecha,
                     D.Nombre AS Director,
-                    GROUP_CONCAT(A.Nombre || CASE WHEN PA.Principal THEN ' (Principal)' ELSE '' END SEPARATOR ', ') AS Actores,
+                    GROUP_CONCAT(A.Nombre SEPARATOR ', ') AS Actores,
                     E.ID_Ejemplar,
                     E.Estado_Conservacion,
                     CASE 
@@ -371,7 +371,7 @@ def alquileres_socio(request, cursor, conexion):
             ''')
         columns = [col[0] for col in cursor.description]  # Nombres de las columnas
         alquileres = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        print(alquileres)  # Imprime los datos para verificar
+        
         return render(request, 'alquiler_pelicula.html', {'alquileres': alquileres})
     except Exception as e:
             print(f"Error al obtener datos: {e}")

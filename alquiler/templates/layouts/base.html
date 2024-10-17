@@ -12,21 +12,26 @@
     <link rel="stylesheet" href="{% static 'css/css.css' %}">
 </head>
 <body>
-    <nav class="navegacion">
-        <h1>Rodelfims</h1>
-        <ul>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="#">Contacto</a></li>
-            {% if user.is_authenticated %}
-            <li><a href="/administrador">administrador</a></li>
-            <li><a href="/alquiler">Alquiler</a></li>
-            <li><a href="/mis_alquileres">Mis Alquileres</a></li>
-            <li><a href="/signout">Cerrar Sesion</a></li>
-            {% else %}
-            <li><a href="/peliculas">Peliculas</a></li>
-            <li><a href="/signin">Iniciar Sesion</a></li>
-            {% endif %}
-        </ul>
+    <nav class="navegacion navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <h1>Rodelfims</h1>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="#">Contacto</a></li>
+                {% if user.is_authenticated %}
+                <li><a href="/administrador">administrador</a></li>
+                <li><a href="/alquiler">Alquiler</a></li>
+                <li><a href="/mis_alquileres">Mis Alquileres</a></li>
+                <li><a href="/signout">Cerrar Sesion</a></li>
+                {% else %}
+                <li><a href="/peliculas">Peliculas</a></li>
+                <li><a href="/signin">Iniciar Sesion</a></li>
+                {% endif %}
+            </ul>
+        </div>
     </nav>
     
    <main>
