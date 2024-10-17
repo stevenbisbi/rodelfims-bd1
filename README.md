@@ -5,15 +5,21 @@ Descripción del Proyecto
 Rodelfims es una plataforma de gestión de películas y alquileres desarrollada como un proyecto académico, que incluye tanto el backend como la base de datos desplegados en producción. Permite a los usuarios explorar películas, gestionar alquileres y realizar operaciones administrativas mediante un sistema CRUD.
 
 🚀 Tecnologías Utilizadas
+
 Django: Framework web backend para gestionar la lógica del negocio y formularios.
+
 
 MySQL: Sistema de gestión de bases de datos para almacenar películas, usuarios, y alquileres.
 
+
 Bootstrap: Estilo frontend responsivo para mejorar la interfaz de usuario.
+
 
 Railway: Plataforma utilizada para el despliegue del proyecto en producción.
 
+
 GitHub: Control de versiones y colaboración del equipo.
+
 
 🌐 Acceso al Proyecto
 
