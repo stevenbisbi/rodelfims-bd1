@@ -8,15 +8,15 @@
             {% for alquiler in alquileres %}
             <!-- <img src="https://via.placeholder.com/300x400" -->
             <div class="col-md-4 my-3 color-form">
-                <div class="movie-card">
+                <div class="movie-card p-5">
                    <h3>Nombre:</h3>
-                   <p>alquiler.1</p>
+                   <p>{{ alquiler.Nombre_Socio }}</p>
                    <h3>Pelicula alquilada:</h3>
-                   <p>alquiler.2</p>
+                   <p>{{ alquiler.Titulo}}</p>
                    <h3>Fecha de alquiler:</h3>
-                   <p>alquiler.4</p>
+                   <p>{{ alquiler.Fecha_comienzo }}</p>
                    <h3>Estado del ejemplar:</h3>
-                   <p>alquiler.3</p>
+                   <p>{{ alquiler.Estado_Conservacion }}</p>
                     </div>
                 </div>
             </div>

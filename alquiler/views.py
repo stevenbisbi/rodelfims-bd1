@@ -371,7 +371,6 @@ def alquileres_socio(request, cursor, conexion):
             ''')
         columns = [col[0] for col in cursor.description]  # Nombres de las columnas
         alquileres = [dict(zip(columns, row)) for row in cursor.fetchall()]
-        
         return render(request, 'alquiler_pelicula.html', {'alquileres': alquileres})
     except Exception as e:
             print(f"Error al obtener datos: {e}")
