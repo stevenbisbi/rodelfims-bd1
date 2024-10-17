@@ -1,5 +1,7 @@
 Rodelfims 🎥
+
 Descripción del Proyecto
+
 Rodelfims es una plataforma de gestión de películas y alquileres desarrollada como un proyecto académico, que incluye tanto el backend como la base de datos desplegados en producción. Permite a los usuarios explorar películas, gestionar alquileres y realizar operaciones administrativas mediante un sistema CRUD.
 
 🚀 Tecnologías Utilizadas
