@@ -9,7 +9,10 @@
       comodidad de tu hogar
     </p>
     <div class="boton-container">
-      <button class="boton-main">Alquilar</button>
+      <form method="POST" action="{% url 'alquiler' %}">
+        {% csrf_token %}
+        <button  type="submit" class="button">Alquiler</button>
+    </form>
       <button class="boton-secundary">Ver</button>
     </div>
   </div>
@@ -23,7 +26,11 @@
         brindando acceso a una amplia variedad de titulos para disfrutar desde
         la comodidad de su hogar
       </p>
-      <button class="button">Alquiler</button>
+      <form method="POST" action="{% url 'alquiler' %}">
+        {% csrf_token %}
+        <button  type="submit" class="button">Alquiler</button>
+    </form>
+      
     </div>
     <div>
       <img class="img-radius" src="{% static 'img/comentario.webp' %}" alt="comentario" />

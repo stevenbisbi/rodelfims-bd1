@@ -185,7 +185,7 @@ def obetener_detalles():
                     END AS Disponibilidad
                 FROM Pelicula P
                 LEFT JOIN Director D ON P.ID_Director = D.ID_Director
-                LEFT JOIN Pelicula_Actor PA ON P.ID_Pelicula = PA.ID_Pelicfula
+                LEFT JOIN Pelicula_Actor PA ON P.ID_Pelicula = PA.ID_Pelicula
                 LEFT JOIN Actor A ON PA.ID_Actor = A.ID_Actor
                 LEFT JOIN Ejemplar E ON P.ID_Pelicula = E.ID_Pelicula
                 LEFT JOIN Alquiler AL ON E.ID_Ejemplar = AL.ID_Ejemplar
@@ -378,6 +378,7 @@ def alquileres_socio(request, cursor, conexion):
 
 def peliculas(request):
     detalles = obetener_detalles()
+    print(detalles)
     return render(request, 'peliculas.html', {'detalles':detalles})
 
 @with_db_connection
